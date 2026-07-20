@@ -17,12 +17,10 @@
   min-height: 280px; /* Increased from 260px for more breathing room */
   display: grid;
   grid-template-columns: 2.3fr 1fr;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #ffffff;
   border-radius: 24px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  filter: drop-shadow(0 -4px 12px rgba(0, 0, 0, 0.08)) drop-shadow(0 12px 24px rgba(0, 0, 0, 0.08));
+  border: 1px solid rgba(0, 0, 0, 0.12);
   overflow: hidden;
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease;
   will-change: transform, opacity;
@@ -39,7 +37,7 @@
 
 .stacked-card.active-card {
   position: relative; /* Active card gives the wrapper its height */
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0, 0, 0, 0.03);
+  filter: drop-shadow(0 -8px 16px rgba(0, 0, 0, 0.08)) drop-shadow(0 24px 32px rgba(0, 0, 0, 0.12));
 }
 
 .stacked-card.finished {
@@ -124,7 +122,7 @@
 
 /* ── RIGHT SECTION (30%) ── */
 .pass-right {
-  background: rgba(248, 248, 250, 0.7);
+  background: #f8f8fa;
   padding: 32px 32px;
   display: flex;
   flex-direction: column;

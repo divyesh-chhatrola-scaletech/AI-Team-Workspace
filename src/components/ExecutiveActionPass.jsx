@@ -172,7 +172,7 @@ const ExecutiveActionPass = ({ animateIn = false }) => {
           } else {
             scale = 1 - (offset * 0.05);
             translateY = `-${offset * 12}px`; 
-            opacity = offset >= 4 ? 0 : 1 - (offset * 0.15);
+            opacity = offset >= 4 ? 0 : 1;
             
             if (!hasEntered && !isTop) {
               transitionDelay = `${offset * 100}ms`;
