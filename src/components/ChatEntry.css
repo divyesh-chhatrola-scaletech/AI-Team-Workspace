@@ -1,0 +1,101 @@
+.chat-entry-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-top: auto;
+  position: sticky;
+  bottom: 0px;
+  padding: 20px 0;
+  z-index: 50;
+  animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.chat-composer {
+  width: 100%;
+  max-width: 650px;
+  padding: 8px 16px;
+  border-radius: 40px;
+  transition: all 0.3s ease;
+}
+
+.chat-composer:hover, .chat-composer:focus-within {
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08), inset 0 1px 1px rgba(255, 255, 255, 1);
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.composer-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.composer-icon {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.composer-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  font-size: 1.15rem;
+  padding: 16px 0;
+  color: var(--text-primary);
+  font-family: var(--font-family);
+  outline: none;
+}
+
+.composer-input::placeholder {
+  color: #a1a1a6;
+}
+
+.composer-send {
+  background: #1d1d1f;
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.composer-send:hover {
+  transform: scale(1.05);
+  background: #000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.suggested-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  max-width: 650px;
+}
+
+.chip {
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.chip:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+}
+
+@keyframes slideUp {
+  to { opacity: 1; transform: translateY(0); }
+}

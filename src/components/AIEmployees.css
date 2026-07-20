@@ -1,0 +1,232 @@
+.ai-employees-container {
+    margin-top: 32px;
+    animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.ai-employees-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1d1d1f;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+}
+
+.ai-employees-subtitle {
+    font-size: 0.95rem;
+    color: #515154;
+    margin-bottom: 32px;
+}
+
+.employees-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.employee-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(40px) saturate(150%);
+    -webkit-backdrop-filter: blur(40px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-top: 1px solid rgba(255, 255, 255, 0.8);
+    border-left: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.07);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.employee-card:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(31, 38, 135, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+
+.employee-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: skewX(-20deg);
+    transition: 0.5s;
+    z-index: 1;
+}
+
+.employee-card:hover::after {
+    left: 150%;
+}
+
+.employee-avatar-wrapper {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin-bottom: 16px;
+    z-index: 2;
+}
+
+.employee-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 3px solid white;
+}
+
+.status-indicator.maya {
+    background: #34c759;
+}
+
+.status-indicator.slawo {
+    background: #ff9500;
+}
+
+.status-indicator.mishil {
+    background: #007aff;
+}
+
+.status-indicator.shivani {
+    background: #ff3b30;
+}
+
+.employee-info {
+    z-index: 2;
+}
+
+.employee-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1d1d1f;
+    margin-bottom: 4px;
+}
+
+.employee-role {
+    font-size: 0.85rem;
+    color: #515154;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.employee-status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+    border: 1px solid rgba(37, 99, 235, 0.2);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.05);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.employee-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    width: 100%;
+    z-index: 2;
+}
+
+.employee-action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.config-btn {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1d1d1f;
+}
+
+.config-btn:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.chat-btn {
+    background: #1d1d1f;
+    color: white;
+}
+
+.chat-btn:hover {
+    background: #333336;
+}
+
+/* ── Playbook Status on Employee Cards ── */
+.employee-playbook-status {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    margin-top: 8px;
+    z-index: 2;
+}
+
+.emp-pb-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.emp-pb-label {
+    font-size: 0.72rem;
+    color: #86868b;
+    font-weight: 500;
+}
+
+.emp-pb-value {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #1d1d1f;
+}
+
+.emp-pb-style {
+    text-transform: capitalize;
+    color: #0a84ff;
+}

@@ -1,0 +1,658 @@
+/* ═══════════════════════════════════════════════════════════════
+   TASK DECK OVERLAY — Stacking Cards Experience
+   Premium full-screen overlay with card stack interactions
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Overlay Backdrop ── */
+@keyframes overlay-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes overlay-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes overlay-slide-out {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(60px);
+  }
+}
+
+/* Subtle float for the card stack */
+@keyframes stack-float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Card completion exit */
+@keyframes card-complete-exit {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  40% {
+    opacity: 0.8;
+    transform: translateX(-30px) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-200px) scale(0.9) rotateZ(-5deg);
+  }
+}
+
+/* Card stagger entrance */
+@keyframes card-stagger-in {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Gradient animation for overlay bg */
+@keyframes overlay-gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.task-deck-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  animation: overlay-fade-in 0.4s ease forwards;
+
+  /* Blurred backdrop */
+  background: linear-gradient(
+    135deg,
+    rgba(245, 247, 252, 0.92) 0%,
+    rgba(235, 240, 252, 0.90) 40%,
+    rgba(240, 235, 250, 0.92) 70%,
+    rgba(245, 248, 255, 0.92) 100%
+  );
+  background-size: 300% 300%;
+  animation: overlay-fade-in 0.4s ease forwards,
+             overlay-gradient-shift 20s ease-in-out infinite;
+  backdrop-filter: blur(30px) saturate(160%);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+}
+
+.task-deck-overlay.closing {
+  animation: overlay-slide-out 0.4s ease forwards;
+  pointer-events: none;
+}
+
+/* ── Two-Panel Layout ── */
+.deck-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Left Panel: Card Stack ── */
+.deck-stack-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  animation: overlay-slide-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ── Header Section ── */
+.deck-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 40px;
+  z-index: 10;
+}
+
+.deck-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.deck-header-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+}
+
+.deck-header-subtitle {
+  font-size: 0.82rem;
+  color: #86868b;
+  font-weight: 500;
+}
+
+.deck-close-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: #1d1d1f;
+  font-size: 1.1rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.deck-close-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: scale(1.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Card Stack Container ── */
+.deck-stack-container {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  height: 480px;
+  perspective: 1200px;
+  animation: stack-float 6s ease-in-out infinite;
+}
+
+/* ── Progress Indicator ── */
+.deck-progress {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.deck-progress-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.deck-progress-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.deck-progress-dot.active {
+  background: #0a84ff;
+  width: 20px;
+  border-radius: 4px;
+}
+
+.deck-progress-dot.completed {
+  background: #30d158;
+}
+
+.deck-progress-text {
+  font-size: 0.75rem;
+  color: #86868b;
+  font-weight: 600;
+}
+
+/* ── Individual Task Card ── */
+.task-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: card-stagger-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 8px 32px rgba(31, 38, 135, 0.06),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 1px rgba(255, 255, 255, 0.8);
+}
+
+.task-card.behind {
+  cursor: pointer;
+}
+
+.task-card.behind:hover {
+  transform: translateY(var(--stack-y)) scale(var(--stack-scale)) translateX(4px) !important;
+}
+
+.task-card.active-card {
+  z-index: 10;
+}
+
+.task-card.active-card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 20px 60px rgba(31, 38, 135, 0.1),
+    0 8px 24px rgba(0, 0, 0, 0.06),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+.task-card.completing {
+  animation: card-complete-exit 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  pointer-events: none;
+}
+
+/* Card priority accent strip */
+.task-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: 4px 0 0 4px;
+}
+
+.task-card-accent.critical { background: linear-gradient(180deg, #ff453a, #ff6961); }
+.task-card-accent.important { background: linear-gradient(180deg, #ff9f0a, #ffb340); }
+.task-card-accent.normal { background: linear-gradient(180deg, #0a84ff, #5ac8fa); }
+.task-card-accent.completed { background: linear-gradient(180deg, #30d158, #5ae07a); }
+
+/* ── Card Inner Content ── */
+.task-card-inner {
+  padding: 28px 28px 24px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Card top row: number + priority badge */
+.task-card-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.task-card-number {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #86868b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.task-card-priority-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.task-card-priority-badge.critical {
+  background: rgba(255, 69, 58, 0.1);
+  color: #ff453a;
+  border: 1px solid rgba(255, 69, 58, 0.2);
+}
+
+.task-card-priority-badge.important {
+  background: rgba(255, 159, 10, 0.1);
+  color: #ff9f0a;
+  border: 1px solid rgba(255, 159, 10, 0.2);
+}
+
+.task-card-priority-badge.normal {
+  background: rgba(10, 132, 255, 0.1);
+  color: #0a84ff;
+  border: 1px solid rgba(10, 132, 255, 0.2);
+}
+
+/* Card Title */
+.task-card-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+/* Owner Section */
+.task-card-owner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.task-card-owner:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.task-card-owner-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-card-owner-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.task-card-owner-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+.task-card-owner-role {
+  font-size: 0.72rem;
+  color: #86868b;
+  font-weight: 500;
+}
+
+.task-card-owner-arrow {
+  margin-left: auto;
+  color: #86868b;
+  transition: transform 0.3s ease;
+}
+
+.task-card-owner:hover .task-card-owner-arrow {
+  transform: translateX(3px);
+  color: #0a84ff;
+}
+
+/* Reason and Impact */
+.task-card-detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-card-detail-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #86868b;
+}
+
+.task-card-detail-text {
+  font-size: 0.88rem;
+  color: #1d1d1f;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+/* Card Actions */
+.task-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.task-card-action-btn {
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid transparent;
+}
+
+.task-card-action-btn.primary {
+  background: #1d1d1f;
+  color: white;
+  border-color: #1d1d1f;
+}
+
+.task-card-action-btn.primary:hover {
+  background: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.task-card-action-btn.secondary {
+  background: rgba(52, 199, 89, 0.08);
+  color: #30d158;
+  border-color: rgba(52, 199, 89, 0.2);
+}
+
+.task-card-action-btn.secondary:hover {
+  background: rgba(52, 199, 89, 0.15);
+  transform: translateY(-2px);
+}
+
+.task-card-action-btn.tertiary {
+  background: rgba(0, 0, 0, 0.03);
+  color: #86868b;
+  border-color: rgba(0, 0, 0, 0.06);
+}
+
+.task-card-action-btn.tertiary:hover {
+  background: rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+/* ── Behind Card Preview ── */
+.task-card-behind-preview {
+  padding: 20px 28px 20px 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 70px;
+}
+
+.task-card-behind-number {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #86868b;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.task-card-behind-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-card-behind-badge {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.task-card-behind-badge.critical {
+  background: rgba(255, 69, 58, 0.1);
+  color: #ff453a;
+}
+
+.task-card-behind-badge.important {
+  background: rgba(255, 159, 10, 0.1);
+  color: #ff9f0a;
+}
+
+.task-card-behind-badge.normal {
+  background: rgba(10, 132, 255, 0.1);
+  color: #0a84ff;
+}
+
+/* ── Right Detail Panel ── */
+.deck-detail-panel {
+  width: 380px;
+  background: rgba(255, 255, 255, 0.5);
+  border-left: 1px solid rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 100px 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+  animation: overlay-slide-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+  opacity: 0;
+}
+
+.deck-detail-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.deck-detail-section-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #86868b;
+}
+
+.deck-detail-section-text {
+  font-size: 0.9rem;
+  color: #1d1d1f;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* Task completion summary */
+.deck-completion-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 18px;
+}
+
+.deck-completion-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deck-completion-label {
+  font-size: 0.82rem;
+  color: #86868b;
+  font-weight: 500;
+}
+
+.deck-completion-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1d1d1f;
+}
+
+.deck-completion-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.deck-completion-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #30d158, #5ae07a);
+  border-radius: 3px;
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Keyboard Shortcut Hints ── */
+.deck-keyboard-hints {
+  position: absolute;
+  bottom: 28px;
+  right: 40px;
+  display: flex;
+  gap: 12px;
+  z-index: 10;
+}
+
+.deck-kbd-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: #86868b;
+  font-weight: 500;
+}
+
+.deck-kbd {
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  font-family: var(--font-family);
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .deck-detail-panel {
+    display: none;
+  }
+
+  .deck-stack-panel {
+    padding: 20px;
+  }
+
+  .deck-stack-container {
+    max-width: 100%;
+  }
+}

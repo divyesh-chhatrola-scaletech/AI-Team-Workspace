@@ -1,0 +1,237 @@
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.hero-greeting-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.greeting-text {
+  font-size: 4rem;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  display: flex;
+  align-items: center;
+  color: var(--text-primary);
+}
+
+.good-morning {
+  animation: slideInFade 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.user-name {
+  margin-left: 12px;
+  background: linear-gradient(90deg, #1d1d1f 0%, #434345 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.wave {
+  margin-left: 16px;
+  display: inline-block;
+  animation: wave-animation 2.5s infinite;
+  transform-origin: 70% 70%;
+  opacity: 0;
+  animation: wave-in 0.5s forwards, wave-animation 2.5s infinite 0.5s;
+}
+
+@keyframes wave-in {
+  to { opacity: 1; }
+}
+
+@keyframes wave-animation {
+  0% { transform: rotate(0.0deg) }
+  10% { transform: rotate(14.0deg) }
+  20% { transform: rotate(-8.0deg) }
+  30% { transform: rotate(14.0deg) }
+  40% { transform: rotate(-4.0deg) }
+  50% { transform: rotate(10.0deg) }
+  60% { transform: rotate(0.0deg) }
+  100% { transform: rotate(0.0deg) }
+}
+
+.intro-text {
+  font-size: 1.35rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-weight: 400;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.8s ease;
+}
+
+.intro-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.decision-cards-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.decision-cards-row.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.decision-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.decision-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.06), inset 0 1px 1px rgba(255, 255, 255, 1);
+}
+
+.card-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.card-icon-wrapper.revenue {
+  background: rgba(255, 59, 48, 0.1);
+  color: #ff3b30;
+}
+
+.card-icon-wrapper.marketing {
+  background: rgba(52, 199, 89, 0.1);
+  color: #34c759;
+}
+
+.card-icon-wrapper.health {
+  background: rgba(255, 149, 0, 0.1);
+  color: #ff9500;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.card-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.brief-and-assistant {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s;
+  align-items: start;
+}
+
+.brief-and-assistant.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.executive-brief {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.brief-header {
+  margin-bottom: 24px;
+}
+
+.brief-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+.brief-intro {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.brief-content-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.brief-list-item {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  gap: 12px;
+}
+
+.bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.brief-footer {
+  margin-top: auto;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.attention-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff3b30;
+  box-shadow: 0 0 8px rgba(255, 59, 48, 0.6);
+}
+
+.assistant-wrapper {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes slideInFade {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
